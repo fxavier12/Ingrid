@@ -1,8 +1,8 @@
-#*******************************************************************
-#******                                                       ******
-#******               INGRID   V_1.0.0.0                      ******
-#******                                                       ******
-#*******************************************************************
+*******************************************************************
+******                                                       ******
+******               INGRID   V_1.0.0.0                      ******
+******                                                       ******
+*******************************************************************
 
-
-BothanSpy e Gyrfalcon
+BotNet.
+O bot é um software quando for executado vai abri uma conexão com o servidor, tcp melhor, por meio dessa conexão ele recebe comando para ser executado pelo terminal, e retorna o resultado da operação.
