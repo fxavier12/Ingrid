@@ -3,7 +3,7 @@
 ******               INGRID   V_1.0.0.0                      ******
 ******                                                       ******
 *******************************************************************
-
+![alt text](https://media.istockphoto.com/vectors/botnet-architecture-hacker-botmaster-use-computer-zombies-bot-with-vector-id898278062?s=2048x2048)
 BotNet.
 O bot é um software quando for executado vai abri uma conexão com o servidor, tcp melhor, por meio dessa conexão ele recebe comando para ser executado pelo terminal, e retorna o resultado da operação.
 
