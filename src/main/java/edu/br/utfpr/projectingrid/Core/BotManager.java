@@ -2,8 +2,9 @@
  * Classe responsavel por gerenciar a thread de conexao de cada Bot 
  *
  */
-package edu.br.utfpr.projectingrid;
+package edu.br.utfpr.projectingrid.Core;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -28,11 +29,12 @@ public class BotManager extends Thread{
 			Object recebido = null;
 			
 			do {
-                           
-				if(in.readObject() != null){
+                                try{
                                     recebido = in.readObject();
                                     System.out.println(recebido.toString());
-				out.writeObject(recebido);
+                                    out.writeObject(recebido);
+                                }catch(EOFException err){
+                                    
                                 }
 								
 			} while (true);

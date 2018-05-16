@@ -9,6 +9,6 @@ package edu.br.utfpr.projectingrid.Setup;
  * @author Francisco Xavier 12/05/2018
  */
 public class Setup {
-    public static String ip = "localhost";
+    public static String ip = "10.20.43.144";
     public static int porta = 1099;      
 }
