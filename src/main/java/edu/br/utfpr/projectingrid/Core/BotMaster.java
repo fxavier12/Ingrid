@@ -19,6 +19,7 @@ import javax.swing.JFrame;
  */
 public class BotMaster extends Thread{
     private static ServerSocket socket;
+    private static  BotMaster master;
     private BotMasterView viewBotMaster;
     
     public BotMaster(BotMasterView viewBotMaster){
@@ -32,8 +33,21 @@ public class BotMaster extends Thread{
 				+ socket.getLocalPort());
 	
     }    
+
+    private BotMaster() {
+
+        try {
+			socket = new ServerSocket(Setup.porta);
+	} catch (IOException e1) {
+			e1.printStackTrace();
+	}
+	this.viewBotMaster = viewBotMaster;
+        System.out.println("BotMaster rodando na porta = "
+				+ socket.getLocalPort());
+    }
     @Override
     public void run() {
+        System.out.println(socket.getInetAddress());
         while (true) {
 	    try {
 		Socket conexao = socket.accept();
@@ -45,11 +59,14 @@ public class BotMaster extends Thread{
 		System.out.println("======================================");
 		new BotManager(conexao).start();
                 
-                viewBotMaster.IngridPrompt("Ingrid:// novo bot connectado...");
+                //viewBotMaster.IngridPrompt("Ingrid:// novo bot connectado...");
 	    } catch (IOException e) {
 		e.printStackTrace();
             }
 	}
     }
-    
+    public static void main(String args[]){
+         master = new  BotMaster();
+         master.start();
+    }
 }
