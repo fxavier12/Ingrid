@@ -21,24 +21,65 @@ import java.util.Scanner;
  */
 public class BotManager extends Thread{
     private Socket socket;
+
+    public Host getBotHost() {
+        return botHost;
+    }
+
+    public boolean isComandoPendente() {
+        return comandoPendente;
+    }
+
+    public Comando getComando() {
+        return comando;
+    }
+    private Host botHost;
+    private boolean comandoPendente;
+    private Comando comando;
     
     public BotManager(Socket socket){
         this.socket = socket;
+        this.botHost = null;
+        this.comandoPendente = false;
+       
     }
     @Override
     public void run() {
 		try {
-                        Scanner digite = new Scanner(System.in);
-			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			Object recebido = null;
-                        String retorno = "";
-                        InetAddress usuario = socket.getInetAddress();
-                        String vet[] = null;
-                        boolean cond = true;
-			do {
+
+                       ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+		       ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                        do {
                             
+                            //recebendo informacoes do Host
+                            if(botHost==null){
+                                out.writeObject(new Comando("HostInfo"));
+                                while(botHost == null){
+                                    botHost= (Host)in.readObject();
+                                }
+                                System.out.println(botHost.toString());
+                            }else{
+                            //executando comandos (se estiver pendente)
+                                if(comandoPendente){
+                                    out.writeObject(comando);
+                                    Object resposta = null;
+                                    
+                                    do{
+                                        resposta= (Host)in.readObject();
+                                    }while(resposta == null);
+                                    comando = (Comando) resposta;
+                                    comandoPendente = false;
+                                }
+                                    
+                            }
+                            
+                            
+                            
+                            /*
                             try{
+                                
+                                
+                                
                                 if(cond){
                                     System.out.print("["+usuario.getHostAddress()+"]>> ");
                                     retorno = digite.nextLine();
@@ -80,12 +121,18 @@ public class BotManager extends Thread{
                             }catch(EOFException err){
                                 System.out.println("Erro na conexao "+ err);
                             }
+                            */
 								
 			} while (true);
 		} catch (IOException e) {
-                   // System.err.println("Erro ao execuar comandos "+e);
+                    System.err.println("Erro ao execuar comandos "+e);
 		} catch (Exception e) {
-                  //  System.err.println("Erro ao execuar comandos "+e);
+                    System.err.println("Erro ao execuar comandos "+e);
 		}
 	}
+    
+    public void enviarComando(Comando comando){
+        this.comando = comando;
+        this.comandoPendente = true;
+    }
 }
