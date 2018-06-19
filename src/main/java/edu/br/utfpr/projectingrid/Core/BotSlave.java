@@ -50,7 +50,7 @@ public class BotSlave {
         */
     }
     
-    public static void main(String argv[]) throws Exception {
+   public static void main(String argv[]) throws Exception {
         thisHost = new Host();
         
         
