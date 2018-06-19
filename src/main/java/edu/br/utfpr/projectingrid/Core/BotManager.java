@@ -63,17 +63,13 @@ public class BotManager extends Thread{
                                 if(comandoPendente){
                                     out.writeObject(comando);
                                     Object resposta = null;
-                                    
-                                    do{
-                                        resposta= (Host)in.readObject();
-                                    }while(resposta == null);
-                                    comando = (Comando) resposta;
+                                    System.out.println("enviando comando");
                                     comandoPendente = false;
                                 }
                                     
                             }
                             
-                            
+                            Thread.sleep(500);
                             
                             /*
                             try{
@@ -132,6 +128,7 @@ public class BotManager extends Thread{
 	}
     
     public void enviarComando(Comando comando){
+        System.out.println("enviar comando");
         this.comando = comando;
         this.comandoPendente = true;
     }

