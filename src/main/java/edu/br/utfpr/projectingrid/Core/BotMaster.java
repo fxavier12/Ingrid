@@ -11,6 +11,7 @@ import edu.br.utfpr.projectingrid.View.BotMasterView;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 
 /**
@@ -21,26 +22,21 @@ public class BotMaster extends Thread{
     private static ServerSocket socket;
     private static  BotMaster master;
     private BotMasterView viewBotMaster;
+
+    public ArrayList<BotManager> getBotsConectados() {
+        return botsConectados;
+    }
+    private ArrayList<BotManager> botsConectados;
     
-    public BotMaster(BotMasterView viewBotMaster){
-         try {
-			socket = new ServerSocket(Setup.porta);
-	} catch (IOException e1) {
-			e1.printStackTrace();
-	}
-	this.viewBotMaster = viewBotMaster;
-        System.out.println("BotMaster rodando na porta = "
-				+ socket.getLocalPort());
-	
-    }    
+    public BotMaster(BotMasterView viewBotMaster) {
 
-    private BotMaster() {
-
+        botsConectados = new ArrayList<BotManager>();
         try {
-			socket = new ServerSocket(Setup.porta);
+	    socket = new ServerSocket(Setup.porta);
 	} catch (IOException e1) {
-			e1.printStackTrace();
+	    e1.printStackTrace();
 	}
+        
 	this.viewBotMaster = viewBotMaster;
         System.out.println("BotMaster rodando na porta = "
 				+ socket.getLocalPort());
@@ -52,21 +48,22 @@ public class BotMaster extends Thread{
 	    try {
 		Socket conexao = socket.accept();
                 System.out.println("Bot Connetado");
+                //infos da nova conecao
 		System.out.println("HOSTNAME = " + conexao.getInetAddress().getHostName());
 		System.out.println("HOST ADDRESS = " + conexao.getInetAddress().getHostAddress());
 		System.out.println("PORTA LOCAL = " + conexao.getLocalPort());
                 System.out.println("PORTA DE CONEXAO = " + conexao.getPort());
 		System.out.println("======================================");
-		new BotManager(conexao).start();
                 
-                //viewBotMaster.IngridPrompt("Ingrid:// novo bot connectado...");
+		BotManager novoBot = new BotManager(conexao);
+                novoBot.start();
+                botsConectados.add(novoBot);        
+                
+                viewBotMaster.IngridPrompt("Ingrid:// novo bot connectado...");
+                viewBotMaster.novoBot();
 	    } catch (IOException e) {
 		e.printStackTrace();
             }
 	}
-    }
-    public static void main(String args[]){
-         master = new  BotMaster();
-         master.start();
     }
 }

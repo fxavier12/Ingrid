@@ -6,6 +6,11 @@
 package edu.br.utfpr.projectingrid.View;
 
 import edu.br.utfpr.projectingrid.Core.BotMaster;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -18,10 +23,11 @@ public class BotMasterView extends javax.swing.JFrame {
      */
     public BotMasterView() {
         initComponents();
-        BotMaster master = new BotMaster(this);
+        master = new BotMaster(this);
         master.start();
     }
 
+  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,6 +39,9 @@ public class BotMasterView extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaIngridPrompt = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableBots = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -42,19 +51,40 @@ public class BotMasterView extends javax.swing.JFrame {
         jTextAreaIngridPrompt.setText("Ingrid://");
         jScrollPane1.setViewportView(jTextAreaIngridPrompt);
 
+        jTableBots.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jTableBots);
+
+        jLabel1.setText("Bots Conectados");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 701, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 701, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(447, Short.MAX_VALUE)
+                .addContainerGap(129, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -97,13 +127,35 @@ public class BotMasterView extends javax.swing.JFrame {
                 new BotMasterView().setVisible(true);
             }
         });
+        
+      
     }
 
     public void IngridPrompt(String line){
         jTextAreaIngridPrompt.setText(line);
     }
+    
+    public void atualizarTabela(){
+        jTableBots.setModel(new BotsTableModel(master.getBotsConectados()));
+    }
+    
+    public void novoBot(){
+        JOptionPane.showMessageDialog(this, "Novo Bot Connectado!!!\n\tconfigurando...");
+        try {
+            TimeUnit.SECONDS.sleep(1/2);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BotMasterView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        atualizarTabela();
+
+    }
+      
+    private static BotMaster master;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTableBots;
     private javax.swing.JTextArea jTextAreaIngridPrompt;
     // End of variables declaration//GEN-END:variables
 }
