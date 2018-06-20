@@ -1,0 +1,8 @@
+services:
+
+before_script:
+ - ls
+language: java
+jdk:
+  - oraclejdk8
+script: mvn clean verify -DskipTests=false -DskipITs=false -DskipSTs=false
