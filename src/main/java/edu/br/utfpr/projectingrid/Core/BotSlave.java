@@ -5,6 +5,7 @@ package edu.br.utfpr.projectingrid.Core;
  * Executa comandos enviados pelo BotMaster
  */
 import edu.br.utfpr.ip.Ip;
+import edu.br.utfpr.projectingrid.Setup.Setup;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -23,7 +24,7 @@ public class BotSlave {
     private static ObjectOutputStream out;
     private static ObjectInputStream in;
     private static Object retorno = "";
-    private static String ip;
+    private static String ip = Setup.ip;
     private static Host thisHost;
     
     BotSlave() throws InterruptedException{
